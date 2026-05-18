@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Dashboard - CGPA Calculator</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="main-container">
+        <nav>
+            <span id="welcomeText">Welcome, Student</span>
+            <div>
+                <a href="dashboard.html">Calculator</a>
+                <a href="history.html">History</a>
+                <button onclick="logout()">Logout</button>
+            </div>
+        </nav>
+
+        <div class="card student-info">
+            <h3>Student Details</h3>
+            <p>ID: <span id="sID"></span> | Dept: <span id="sDept"></span></p>
+        </div>
+
+        <div class="card calculator">
+            <h3>Add New Subject</h3>
+            <div class="input-group">
+                <input type="text" id="subName" placeholder="Subject Name">
+                <input type="number" id="subCredit" placeholder="Credit">
+                <input type="number" id="subMarks" placeholder="Marks (0-100)">
+                <button onclick="addSubject()">Add</button>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Credit</th>
+                        <th>Marks</th>
+                        <th>Grade</th>
+                        <th>GPA</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="subjectList"></tbody>
+            </table>
+
+            <div class="results">
+                <h2>Current Semester GPA: <span id="currentGPA">0.00</span></h2>
+                <button class="save-btn" onclick="saveSemesterResult()">Save Result</button>
+            </div>
+        </div>
+    </div>
+    <script src="js/calculator.js"></script>
+</body>
+</html>
