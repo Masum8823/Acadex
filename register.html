@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - CGPA System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="auth-container">
+        <form class="auth-box" id="regForm">
+            <h2>Student Registration</h2>
+            
+            <div class="input-group">
+                <label for="regName">Full Name</label>
+                <input type="text" id="regName" placeholder="Enter your full name" required>
+            </div>
+
+            <div class="input-group">
+                <label for="regID">Student ID</label>
+                <input type="text" id="regID" placeholder="Enter your student ID" required>
+            </div>
+
+            <div class="input-group">
+                <label for="regDept">Department</label>
+                <input type="text" id="regDept" placeholder="Enter department (e.g. CSE)" required>
+            </div>
+
+            <div class="input-group">
+                <label for="regPass">Password</label>
+                <input type="password" id="regPass" placeholder="Create a password" required>
+            </div>
+
+            <button type="submit" class="login-btn">Register</button>
+            
+            <p class="switch-text">Already registered? <a href="index.html">Login Here</a></p>
+        </form>
+    </div>
+
+    <!-- জাভাস্ক্রিপ্ট ফাইল লিঙ্ক -->
+    <script src="js/auth.js"></script>
+</body>
+</html>
