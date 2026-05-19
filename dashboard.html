@@ -9,8 +9,7 @@
         <nav>
             <span id="welcomeText">Welcome, Student</span>
             <div class="nav-links">
-                <a href="dashboard.html" class="active">Calculator</a>
-                <a href="history.html">History</a>
+                <a href="dashboard.html" class="active">Dashboard</a>
                 <button onclick="logout()" class="logout-btn">Logout</button>
             </div>
         </nav>
@@ -45,13 +44,41 @@
 
             <div class="results">
                 <h2>Current Semester GPA: <span id="currentGPA">0.00</span></h2>
-                <h2 style="color: #007bff;">Estimated Total CGPA: <span id="estimatedCGPA">0.00</span></h2>
-                
                 <div class="save-section" style="margin-top: 20px; display: flex; gap: 10px; align-items: center;">
-                    <input type="number" id="semesterNum" placeholder="Semester No (e.g. 1)" style="width: 200px; margin: 0;">
+                    <input type="number" id="semesterNum" placeholder="Semester No" style="width: 150px; margin: 0;">
                     <button class="save-btn" onclick="saveSemesterResult()" style="margin: 0; flex: 1;">Save Result</button>
                 </div>
             </div>
+        </div>
+
+        <!-- NEW: View Stored Results Section -->
+        <div class="card history-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; margin-bottom: 15px;">
+                <h3>Stored Results History</h3>
+                <div style="text-align: right;">
+                    <h2 style="margin: 0; color: #28a745;">Overall CGPA: <span id="overallCGPA">0.00</span></h2>
+                </div>
+            </div>
+
+            <div class="filter-row" style="margin-bottom: 15px; display: flex; gap: 10px;">
+                <select id="viewSemesterFilter" onchange="viewResultsBySemester()" style="padding: 10px; border-radius: 4px; border: 1px solid #ddd;">
+                    <option value="all">View All Semesters</option>
+                </select>
+                <button onclick="clearAllHistory()" style="background: #6c757d; width: auto; padding: 0 15px;">Clear History</button>
+            </div>
+
+            <table id="storedHistoryTable">
+                <thead>
+                    <tr>
+                        <th>Semester</th>
+                        <th>Date</th>
+                        <th>GPA</th>
+                        <th>Subjects</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="storedHistoryList"></tbody>
+            </table>
         </div>
     </div>
 
