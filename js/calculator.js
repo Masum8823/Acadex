@@ -1,7 +1,7 @@
 let currentStudent = JSON.parse(localStorage.getItem('loggedInUser'));
 let subjects = [];
 
-if(!currentStudent) {
+if (!currentStudent) {
     window.location.href = "index.html";
 }
 
@@ -14,7 +14,7 @@ function addSubject() {
     const credit = parseFloat(document.getElementById('subCredit').value);
     const marks = parseFloat(document.getElementById('subMarks').value);
 
-    if(!name || isNaN(credit) || isNaN(marks)) {
+    if (!name || isNaN(credit) || isNaN(marks)) {
         return alert("Please fill all fields correctly!");
     }
 
@@ -44,7 +44,8 @@ function calculateGrade(marks) {
 function updateTable() {
     const list = document.getElementById('subjectList');
     list.innerHTML = "";
-    let totalGPAPoints = 0, totalCredits = 0;
+    let totalGPAPoints = 0;
+    let totalCredits = 0;
 
     subjects.forEach((s, index) => {
         totalGPAPoints += (s.gpa * s.credit);
@@ -63,14 +64,13 @@ function updateTable() {
     document.getElementById('currentGPA').innerText = currentGpa.toFixed(2);
 
     let pastResults = currentStudent.results || [];
-    let gpaSum = parseFloat(currentGpa); 
+    let gpaSum = parseFloat(currentGpa);
 
     pastResults.forEach(res => {
         gpaSum += parseFloat(res.gpa);
     });
 
     let totalSemesters = pastResults.length + (totalCredits > 0 ? 1 : 0);
-    
     const estimatedCGPA = totalSemesters === 0 ? 0 : gpaSum / totalSemesters;
 
     const estCGPAElement = document.getElementById('estimatedCGPA');
@@ -95,18 +95,16 @@ function saveSemesterResult() {
     let userIndex = users.findIndex(u => u.id === currentStudent.id);
 
     users[userIndex].results.push({
-        date: new Date().toLocaleDateString(),
+        date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString(),
         gpa: finalGpa,
-        subjectCount: subjects.length
+        details: [...subjects]
     });
 
     localStorage.setItem('users', JSON.stringify(users));
     localStorage.setItem('loggedInUser', JSON.stringify(users[userIndex]));
-    
     currentStudent = users[userIndex];
 
     alert("Result Saved Successfully!");
-    
     subjects = [];
     updateTable();
 }

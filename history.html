@@ -3,6 +3,25 @@
 <head>
     <title>History - CGPA System</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        .subject-tag {
+            display: inline-block;
+            background: #e1e7ff;
+            color: #3b5998;
+            padding: 2px 8px;
+            margin: 2px;
+            border-radius: 4px;
+            font-size: 12px;
+            border: 1px solid #c5cdec;
+        }
+        .gpa-badge {
+            background: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
     <div class="main-container">
@@ -16,13 +35,13 @@
         </nav>
 
         <div class="card">
-            <h3>Your Saved Results</h3>
+            <h3>Your Detailed Result History</h3>
             <table id="historyTable">
                 <thead>
                     <tr>
-                        <th>Date</th>
-                        <th>GPA</th>
-                        <th>Subjects</th>
+                        <th>Date & Time</th>
+                        <th>Semester GPA</th>
+                        <th>Subjects & Grades</th>
                     </tr>
                 </thead>
                 <tbody id="historyList"></tbody>
@@ -37,16 +56,27 @@
         document.getElementById('welcomeTextHistory').innerText = "History of " + user.name;
 
         const list = document.getElementById('historyList');
+        
         if(user.results && user.results.length > 0) {
-            user.results.forEach(res => {
+            [...user.results].reverse().forEach(res => {
+                
+                let subjectsHTML = "";
+                if(res.details) {
+                    res.details.forEach(sub => {
+                        subjectsHTML += `<span class="subject-tag">${sub.name} (${sub.grade})</span>`;
+                    });
+                } else {
+                    subjectsHTML = "No details found";
+                }
+
                 list.innerHTML += `<tr>
                     <td>${res.date}</td>
-                    <td><b>${res.gpa}</b></td>
-                    <td>${res.subjectCount} Subjects</td>
+                    <td><span class="gpa-badge">${res.gpa}</span></td>
+                    <td>${subjectsHTML}</td>
                 </tr>`;
             });
         } else {
-            list.innerHTML = "<tr><td colspan='3'>No results saved yet.</td></tr>";
+            list.innerHTML = "<tr><td colspan='3' style='text-align:center;'>No results saved yet.</td></tr>";
         }
     </script>
 </body>
