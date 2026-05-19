@@ -8,10 +8,10 @@
     <div class="main-container">
         <nav>
             <span id="welcomeText">Welcome, Student</span>
-            <div>
-                <a href="dashboard.html">Calculator</a>
+            <div class="nav-links">
+                <a href="dashboard.html" class="active">Calculator</a>
                 <a href="history.html">History</a>
-                <button onclick="logout()">Logout</button>
+                <button onclick="logout()" class="logout-btn">Logout</button>
             </div>
         </nav>
 
@@ -22,7 +22,7 @@
 
         <div class="card calculator">
             <h3>Add New Subject</h3>
-            <div class="input-group">
+            <div class="input-group-row">
                 <input type="text" id="subName" placeholder="Subject Name">
                 <input type="number" id="subCredit" placeholder="Credit">
                 <input type="number" id="subMarks" placeholder="Marks (0-100)">
@@ -46,10 +46,15 @@
             <div class="results">
                 <h2>Current Semester GPA: <span id="currentGPA">0.00</span></h2>
                 <h2 style="color: #007bff;">Estimated Total CGPA: <span id="estimatedCGPA">0.00</span></h2>
-                <button class="save-btn" onclick="saveSemesterResult()">Save Result</button>
+                
+                <div class="save-section" style="margin-top: 20px; display: flex; gap: 10px; align-items: center;">
+                    <input type="number" id="semesterNum" placeholder="Semester No (e.g. 1)" style="width: 200px; margin: 0;">
+                    <button class="save-btn" onclick="saveSemesterResult()" style="margin: 0; flex: 1;">Save Result</button>
+                </div>
             </div>
         </div>
     </div>
+
     <script src="js/auth.js"></script>
     <script src="js/calculator.js"></script>
 </body>

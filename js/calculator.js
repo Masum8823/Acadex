@@ -86,16 +86,21 @@ function deleteSub(i) {
 
 function saveSemesterResult() {
     const finalGpa = document.getElementById('currentGPA').innerText;
+    const semNo = document.getElementById('semesterNum').value;
     
     if (subjects.length === 0) {
         return alert("Add some subjects first!");
+    }
+    if (!semNo) {
+        return alert("Please enter the Semester Number!");
     }
 
     let users = JSON.parse(localStorage.getItem('users'));
     let userIndex = users.findIndex(u => u.id === currentStudent.id);
 
     users[userIndex].results.push({
-        date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString(),
+        semester: semNo,
+        date: new Date().toLocaleDateString(),
         gpa: finalGpa,
         details: [...subjects]
     });
@@ -104,7 +109,9 @@ function saveSemesterResult() {
     localStorage.setItem('loggedInUser', JSON.stringify(users[userIndex]));
     currentStudent = users[userIndex];
 
-    alert("Result Saved Successfully!");
+    alert("Semester " + semNo + " Result Saved Successfully!");
+    
     subjects = [];
+    document.getElementById('semesterNum').value = "";
     updateTable();
 }

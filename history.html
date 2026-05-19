@@ -21,6 +21,19 @@
             border-radius: 20px;
             font-weight: bold;
         }
+        .sem-badge {
+            background: #6c757d;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .filter-section {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
         .delete-btn {
             background: #ff4757;
             color: white;
@@ -28,10 +41,6 @@
             padding: 5px 12px;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 13px;
-        }
-        .delete-btn:hover {
-            background: #ff6b81;
         }
     </style>
 </head>
@@ -48,13 +57,22 @@
 
         <div class="card">
             <h3>Your Detailed Result History</h3>
+            
+            <div class="filter-section">
+                <label>Filter by Semester:</label>
+                <input type="number" id="filterInput" placeholder="Enter Semester No" style="width: 150px; margin: 0;">
+                <button onclick="filterResults()" style="width: auto; padding: 10px 20px;">Search</button>
+                <button onclick="resetFilter()" style="width: auto; padding: 10px 20px; background: #6c757d;">Reset</button>
+            </div>
+
             <table id="historyTable">
                 <thead>
                     <tr>
-                        <th>Date & Time</th>
-                        <th>Semester GPA</th>
+                        <th>Semester</th>
+                        <th>Date</th>
+                        <th>GPA</th>
                         <th>Subjects & Grades</th>
-                        <th>Action</th> 
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody id="historyList"></tbody>
@@ -64,16 +82,16 @@
 
     <script src="js/auth.js"></script>
     <script>
-        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        let user = JSON.parse(localStorage.getItem('loggedInUser'));
         if(!user) window.location.href = "index.html";
         document.getElementById('welcomeTextHistory').innerText = "History of " + user.name;
 
-        function renderHistory() {
+        function renderHistory(resultsToDisplay) {
             const list = document.getElementById('historyList');
             list.innerHTML = "";
             
-            if(user.results && user.results.length > 0) {
-                user.results.forEach((res, index) => {
+            if(resultsToDisplay && resultsToDisplay.length > 0) {
+                resultsToDisplay.forEach((res, index) => {
                     let subjectsHTML = "";
                     if(res.details) {
                         res.details.forEach(sub => {
@@ -82,6 +100,7 @@
                     }
 
                     list.innerHTML += `<tr>
+                        <td><span class="sem-badge">Semester ${res.semester || 'N/A'}</span></td>
                         <td>${res.date}</td>
                         <td><span class="gpa-badge">${res.gpa}</span></td>
                         <td>${subjectsHTML}</td>
@@ -89,25 +108,37 @@
                     </tr>`;
                 });
             } else {
-                list.innerHTML = "<tr><td colspan='4' style='text-align:center;'>No results saved yet.</td></tr>";
+                list.innerHTML = "<tr><td colspan='5' style='text-align:center;'>No results found.</td></tr>";
             }
         }
 
+        function filterResults() {
+            const val = document.getElementById('filterInput').value;
+            if(!val) return alert("Enter a semester number to filter");
+            
+            const filtered = user.results.filter(r => r.semester == val);
+            renderHistory(filtered);
+        }
+
+        function resetFilter() {
+            document.getElementById('filterInput').value = "";
+            renderHistory(user.results);
+        }
+
         function deleteRecord(index) {
-            if(confirm("Are you sure you want to delete this result?")) {
+            if(confirm("Are you sure you want to delete this record?")) {
                 let users = JSON.parse(localStorage.getItem('users'));
                 let userIdx = users.findIndex(u => u.id === user.id);
                 
                 users[userIdx].results.splice(index, 1);
-                
                 localStorage.setItem('users', JSON.stringify(users));
                 localStorage.setItem('loggedInUser', JSON.stringify(users[userIdx]));
-                
-                location.reload();
+                user = users[userIdx];
+                renderHistory(user.results);
             }
         }
 
-        renderHistory();
+        renderHistory(user.results);
     </script>
 </body>
 </html>
