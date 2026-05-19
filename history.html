@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>History - CGPA System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="main-container">
+        <nav>
+            <span id="welcomeTextHistory">Welcome</span>
+            <div class="nav-links">
+                <a href="dashboard.html">Calculator</a>
+                <a href="history.html" class="active">History</a>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+        </nav>
+
+        <div class="card">
+            <h3>Your Saved Results</h3>
+            <table id="historyTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>GPA</th>
+                        <th>Subjects</th>
+                    </tr>
+                </thead>
+                <tbody id="historyList"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+    <script>
+        const user = JSON.parse(localStorage.getItem('loggedInUser'));
+        if(!user) window.location.href = "index.html";
+        document.getElementById('welcomeTextHistory').innerText = "History of " + user.name;
+
+        const list = document.getElementById('historyList');
+        if(user.results && user.results.length > 0) {
+            user.results.forEach(res => {
+                list.innerHTML += `<tr>
+                    <td>${res.date}</td>
+                    <td><b>${res.gpa}</b></td>
+                    <td>${res.subjectCount} Subjects</td>
+                </tr>`;
+            });
+        } else {
+            list.innerHTML = "<tr><td colspan='3'>No results saved yet.</td></tr>";
+        }
+    </script>
+</body>
+</html>
