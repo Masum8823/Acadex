@@ -60,7 +60,7 @@ function updateTable() {
             <td>${s.marks}</td>
             <td>${s.grade}</td>
             <td>${s.gpa.toFixed(2)}</td>
-            <td><button onclick="deleteSub(${index})" style="background:#ff4757; color:white; border:none; padding:5px 10px; cursor:pointer; border-radius:3px;">Remove</button></td>
+            <td><button onclick="deleteSub(${index})" class="delete-small">Remove</button></td>
         </tr>`;
     });
 
@@ -107,35 +107,30 @@ function loadStoredResults() {
     const overallCGPAElement = document.getElementById('overallCGPA');
     
     list.innerHTML = "";
-    let totalGpaSum = 0;
     let results = currentStudent.results || [];
 
-    // Populate Filter Dropdown
     const currentFilterVal = filter.value;
     filter.innerHTML = '<option value="all">View All Semesters</option>';
-    let uniqueSemesters = [...new Set(results.map(r => r.semester))].sort();
+    let uniqueSemesters = [...new Set(results.map(r => r.semester))].sort((a,b) => a-b);
     uniqueSemesters.forEach(sem => {
         filter.innerHTML += `<option value="${sem}">Semester ${sem}</option>`;
     });
     filter.value = currentFilterVal;
 
-    // Filter Logic
     let displayResults = currentFilterVal === "all" ? results : results.filter(r => r.semester == currentFilterVal);
 
     displayResults.forEach((res, index) => {
-        totalGpaSum += parseFloat(res.gpa);
-        let subs = res.details.map(s => `<small style="background:#eee; padding:2px; margin:2px; border-radius:3px;">${s.name}(${s.grade})</small>`).join(" ");
+        let subs = res.details.map(s => `<small class="sub-badge">${s.name}(${s.grade})</small>`).join("");
         
         list.innerHTML += `<tr>
             <td><b>Semester ${res.semester}</b></td>
             <td>${res.date}</td>
-            <td><span style="color:#28a745; font-weight:bold;">${res.gpa}</span></td>
+            <td><span class="gpa-text">${res.gpa}</span></td>
             <td>${subs}</td>
-            <td><button onclick="deleteSavedResult(${index})" style="background:#ff4757; color:white; border:none; padding:3px 8px; border-radius:3px;">Delete</button></td>
+            <td><button onclick="deleteSavedResult(${index})" class="delete-small">Delete</button></td>
         </tr>`;
     });
 
-    // Calculate Final Overall CGPA
     let avgCGPA = results.length === 0 ? 0 : (results.reduce((acc, curr) => acc + parseFloat(curr.gpa), 0) / results.length);
     overallCGPAElement.innerText = avgCGPA.toFixed(2);
 }
@@ -166,4 +161,23 @@ function clearAllHistory() {
         currentStudent = users[uIdx];
         loadStoredResults();
     }
+}
+
+function generateResultQR() {
+    const overallCGPA = document.getElementById('overallCGPA').innerText;
+    let data = `Student: ${currentStudent.name}\nID: ${currentStudent.id}\nDept: ${currentStudent.dept}\nCGPA: ${overallCGPA}\nVerified by Acadex`;
+
+    document.getElementById("qrcode").innerHTML = "";
+    new QRCode(document.getElementById("qrcode"), {
+        text: data,
+        width: 180,
+        height: 180
+    });
+
+    document.getElementById('qrInfo').innerText = "Result Scan for " + currentStudent.name;
+    document.getElementById('qrModal').style.display = "flex";
+}
+
+function closeQR() {
+    document.getElementById('qrModal').style.display = "none";
 }

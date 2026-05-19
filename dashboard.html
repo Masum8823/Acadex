@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - CGPA Calculator</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
     <div class="main-container">
@@ -51,20 +54,20 @@
             </div>
         </div>
 
-        <!-- NEW: View Stored Results Section -->
         <div class="card history-card">
-            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #f0f2f5; padding-bottom: 10px; margin-bottom: 15px;">
+            <div class="history-header">
                 <h3>Stored Results History</h3>
-                <div style="text-align: right;">
-                    <h2 style="margin: 0; color: #28a745;">Overall CGPA: <span id="overallCGPA">0.00</span></h2>
+                <div class="cgpa-display">
+                    <h2 id="cgpaText">Overall CGPA: <span id="overallCGPA">0.00</span></h2>
+                    <button onclick="generateResultQR()" class="qr-btn">Generate Result QR</button>
                 </div>
             </div>
 
-            <div class="filter-row" style="margin-bottom: 15px; display: flex; gap: 10px;">
-                <select id="viewSemesterFilter" onchange="viewResultsBySemester()" style="padding: 10px; border-radius: 4px; border: 1px solid #ddd;">
+            <div class="filter-row">
+                <select id="viewSemesterFilter" onchange="viewResultsBySemester()">
                     <option value="all">View All Semesters</option>
                 </select>
-                <button onclick="clearAllHistory()" style="background: #6c757d; width: auto; padding: 0 15px;">Clear History</button>
+                <button onclick="clearAllHistory()" class="clear-btn">Clear History</button>
             </div>
 
             <table id="storedHistoryTable">
@@ -79,6 +82,16 @@
                 </thead>
                 <tbody id="storedHistoryList"></tbody>
             </table>
+        </div>
+    </div>
+
+    <div id="qrModal" class="modal">
+        <div class="modal-content">
+            <span onclick="closeQR()" class="close">&times;</span>
+            <h3>Student Result QR Code</h3>
+            <div id="qrcode"></div>
+            <p id="qrInfo"></p>
+            <button onclick="closeQR()">Close</button>
         </div>
     </div>
 
