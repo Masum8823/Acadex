@@ -4,7 +4,6 @@ let subjects = [];
 if (!currentStudent) {
     window.location.href = "index.html";
 }
-
 document.getElementById('welcomeText').innerText = "Welcome, " + currentStudent.name;
 document.getElementById('sID').innerText = currentStudent.id;
 document.getElementById('sDept').innerText = currentStudent.dept;
