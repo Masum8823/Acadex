@@ -108,29 +108,47 @@ function loadStoredResults() {
     list.innerHTML = "";
     let results = currentStudent.results || [];
 
-    const currentFilterVal = filter.value;
-    filter.innerHTML = '<option value="all">View All Semesters</option>';
-    let uniqueSemesters = [...new Set(results.map(r => r.semester))].sort((a,b) => a-b);
-    uniqueSemesters.forEach(sem => {
-        filter.innerHTML += `<option value="${sem}">Semester ${sem}</option>`;
-    });
-    filter.value = currentFilterVal;
+    const currentFilterVal = filter ? filter.value : "all";
+    if (filter) {
+        filter.innerHTML = '<option value="all">View All Semesters</option>';
+        let uniqueSemesters = [...new Set(results.map(r => r.semester))].sort((a, b) => a - b);
+        uniqueSemesters.forEach(sem => {
+            filter.innerHTML += `<option value="${sem}">Semester ${sem}</option>`;
+        });
+        filter.value = currentFilterVal;
+    }
 
     let displayResults = currentFilterVal === "all" ? results : results.filter(r => r.semester == currentFilterVal);
 
-    displayResults.forEach((res, index) => {
-        let subs = res.details.map(s => `<small class="sub-badge">${s.name}(${s.grade})</small>`).join("");
-        
-        list.innerHTML += `<tr>
-            <td><b>Semester ${res.semester}</b></td>
-            <td>${res.date}</td>
-            <td><span class="gpa-text">${res.gpa}</span></td>
-            <td>${subs}</td>
-            <td><button onclick="deleteSavedResult(${index})" class="delete-small">Delete</button></td>
-        </tr>`;
-    });
+    if (displayResults.length === 0) {
+        list.innerHTML = `<tr><td colspan="5" style="text-align:center; color:#94a3b8; padding:20px;">No results found</td></tr>`;
+    } else {
+        displayResults.slice().reverse().forEach((res, index) => {
+            let subsHTML = res.details.map(s => `
+                <div class="subject-row">
+                    <span class="sub-name">${s.name}</span>
+                    <span class="sub-grade">${s.grade}</span>
+                </div>
+            `).join("");
+            
+            list.innerHTML += `
+                <tr>
+                    <td><b>Semester ${res.semester}</b></td>
+                    <td>${res.date}</td>
+                    <td><span class="gpa-text">${res.gpa}</span></td>
+                    <td><div class="subjects-container">${subsHTML}</div></td>
+                    <td>
+                        <button onclick="deleteSavedResult(${results.length - 1 - index})" class="delete-small">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
 
-    let avgCGPA = results.length === 0 ? 0 : (results.reduce((acc, curr) => acc + parseFloat(curr.gpa), 0) / results.length);
+    let totalGpaSum = results.reduce((acc, curr) => acc + parseFloat(curr.gpa), 0);
+    let avgCGPA = results.length === 0 ? 0 : totalGpaSum / results.length;
     overallCGPAElement.innerText = avgCGPA.toFixed(2);
 }
 

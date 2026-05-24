@@ -322,3 +322,42 @@ th {
         font-size: 1.2rem;
     }
 }
+
+.subjects-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 5px 0;
+}
+
+.subject-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    padding: 4px 10px;
+    border-radius: 6px;
+    min-width: 200px;
+    font-size: 0.85rem;
+}
+
+.sub-name {
+    color: #475569;
+    font-weight: 500;
+}
+
+.sub-grade {
+    background: #6366f1;
+    color: white;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .subject-row {
+        min-width: 150px;
+    }
+}
